@@ -5,9 +5,18 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.exceptions import NotFound
 
-from todo.models import Todo, TodoList
-from todo.interfaces.schema.todo import TodoCreate, TodoUpdate, TodoList, TodoListCreate, TodoListUpdate, TodoResponse, TodoListResponse
-from todo.services.todo import (
+from todo.data.models.todo import Todo, TodoList
+from todo.interfaces.schema.todo import (
+    TodoCreate, 
+    TodoListCreate, 
+    TodoListUpdate, 
+    TodoResponse, 
+    TodoListResponse, 
+    TodoUpdate, 
+    TodoListQueryParams, 
+    TodoQueryParams
+)  
+from todo.domain.todo import (
     create_todo_list, 
     create_todo, 
     update_todo, 
@@ -15,7 +24,8 @@ from todo.services.todo import (
     get_todo_list, 
     get_todo_list_todos, 
     list_todo_lists, 
-    update_todo_list
+    update_todo_list,
+    get_todo
 )
 
 # Create your views here.
@@ -24,7 +34,9 @@ class ListTodoListsView(APIView):
     def get(self, request: Request, *args, **kwargs):
 
         # can add params to filter and pagination into the service
-        todo_lists = list_todo_lists()
+        todo_list_query_params = TodoListQueryParams(**request.GET.data)
+
+        todo_lists = list_todo_lists(**todo_list_query_params.dict())
 
         response_body = [TodoListResponse(**todo_list.dict()) for todo_list in todo_lists]
 
@@ -32,8 +44,10 @@ class ListTodoListsView(APIView):
 
     def post(self, request: Request, *args, **kwargs):
         
+        # Validate the request data
         todo_list_in = TodoListCreate(**request.data)
 
+        # Create the todo list
         todo_list = create_todo_list(todo_list_in)
 
         response_body = TodoListResponse(**todo_list.dict())
@@ -73,7 +87,9 @@ class SingleTodoListView(APIView):
 class ListTodoView(APIView):
     def get(self, request: Request, list_id: int, *args, **kwargs):
 
-        todos = get_todo_list_todos(list_id)
+        todo_query_params = TodoQueryParams(**request.query_params)
+
+        todos = get_todo_list_todos(list_id, **todo_query_params.dict())
 
         response_body = [TodoResponse(**todo.dict()) for todo in todos]
 
@@ -92,27 +108,25 @@ class ListTodoView(APIView):
 
 class SingleTodoView(APIView):
 
-    def get(self, request: Request, list_id: int, todo_id: int, *args, **kwargs):
-        pass
+    def get(self, request: Request, todo_list_id: int, todo_id: int, *args, **kwargs):
+        todo = get_todo(todo_list_id, todo_id)
 
-    def patch(self, request: Request, list_id: int, todo_id: int, *args, **kwargs):
-        todo = Todo.objects.filter(id=todo_id).first()
+        response_body = TodoResponse(**todo.dict())
 
-        if not todo:
-            raise NotFound(detail=f"Todo {todo_id} not found.")
+        return Response(response_body.dict(), status=status.HTTP_200_OK)
 
-        for k, v in request.data.items():
-            if hasattr(todo, k, None):
-                setattr(todo, k, v)
+    def patch(self, request: Request, todo_list_id: int, todo_id: int, *args, **kwargs):
 
-        return Response({}, status=status.HTTP_200_OK)
+        todo_in = TodoUpdate(list_id=todo_list_id, **request.data)
 
-    def delete(self, request: Request, todo_id: int, *args, **kwargs):
-        todo = Todo.objects.filter(id=todo_id).first()
+        todo = update_todo(todo_id, todo_in)
 
-        if not todo:
-            raise NotFound(detail=f"Todo {todo_id} not found.")
+        response_body = TodoResponse(**todo.dict())
 
-        todo.delete()
+        return Response(response_body.dict(), status=status.HTTP_200_OK)
+
+    def delete(self, request: Request, todo_list_id: int, todo_id: int, *args, **kwargs):
+    
+        delete_todo(todo_list_id, todo_id)
 
         return Response(None, status=status.HTTP_204_NO_CONTENT)

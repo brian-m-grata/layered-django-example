@@ -1,6 +1,17 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
+class TodoListQueryParams(BaseModel):
+    page: Optional[int]
+    page_size: Optional[int]
+    name: Optional[str]
+
+class TodoQueryParams(BaseModel):
+    page: Optional[int]
+    page_size: Optional[int]
+    title: Optional[str]
+    description: Optional[str]
+    due_date: Optional[str]
 
 class TodoBase(BaseModel):
     title: Optional[str]
