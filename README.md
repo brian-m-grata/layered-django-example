@@ -130,42 +130,7 @@ The application runs with the following services:
 - **Redis**: Message broker for Celery (port 6379)
 - **Celery Worker**: Background task processing
 
-## 📚 Key Technologies
-
-- **Django 5.1**: Web framework
-- **Django REST Framework**: API framework
-- **PostgreSQL**: Primary database
-- **Redis**: Message broker and caching
-- **Celery**: Background task processing
-- **Elasticsearch**: Search functionality
-- **Pydantic**: Data validation and serialization
-- **Poetry**: Dependency management
-- **Docker**: Containerization
-
-## 🧪 Testing
-
-```bash
-# Run tests
-cd sample
-poetry run python manage.py test
-
-# Run with coverage
-poetry run coverage run --source='.' manage.py test
-poetry run coverage report
-```
-
 ## 📖 API Documentation
 
 The application provides RESTful API endpoints for managing todo lists and items. See the [sample README](sample/README.md) for detailed API documentation.
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes following the clean architecture principles
-4. Add tests for new functionality
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.

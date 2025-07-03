@@ -97,44 +97,6 @@ class ListTodoListsView(APIView):
 - Pydantic schemas for input validation
 - DRF serializers for output formatting
 
-## 🚀 Setup and Installation
-
-### Prerequisites
-- Python 3.10+
-- Poetry (dependency management)
-- PostgreSQL
-- Redis
-- Elasticsearch (optional, for search functionality)
-
-### Installation
-
-1. **Install dependencies**
-   ```bash
-   poetry install
-   ```
-
-2. **Environment setup**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your database and service configurations
-   ```
-
-3. **Database setup**
-   ```bash
-   poetry run python manage.py migrate
-   poetry run python manage.py createsuperuser
-   ```
-
-4. **Start the application**
-   ```bash
-   poetry run python manage.py runserver
-   ```
-
-5. **Start Celery worker (in another terminal)**
-   ```bash
-   poetry run celery -A sample.celery_app worker --loglevel=info
-   ```
-
 ## 📚 API Documentation
 
 ### Todo Lists
@@ -198,16 +160,18 @@ GET /api/v1/todo-lists/{list_id}/todos/
 
 **Response:**
 ```json
-[
-  {
-    "id": 1,
-    "title": "Complete project documentation",
-    "description": "Write comprehensive documentation for the new feature",
-    "due_date": "2024-01-20",
-    "created_at": "2024-01-15T10:30:00Z",
-    "updated_at": "2024-01-15T10:30:00Z"
-  }
-]
+{ 
+    "results": [
+        {
+            "id": 1,
+            "title": "Complete project documentation",
+            "description": "Write comprehensive documentation for the new feature",
+            "due_date": "2024-01-20",
+            "created_at": "2024-01-15T10:30:00Z",
+            "updated_at": "2024-01-15T10:30:00Z"
+        }
+    ]
+}
 ```
 
 #### Create Todo
@@ -242,150 +206,3 @@ Content-Type: application/json
 ```http
 DELETE /api/v1/todo-lists/{list_id}/todos/{todo_id}/
 ```
-
-## 🔧 Configuration
-
-### Environment Variables
-
-Create a `.env` file in the sample directory:
-
-```env
-# Database Configuration
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_USER=postgres_user
-POSTGRES_PASSWORD=password
-POSTGRES_NAME=app
-
-# Celery Configuration
-CELERY_BROKER_URL=redis://localhost:6379/0
-CELERY_RESULT_BACKEND=redis://localhost:6379/0
-
-# Elasticsearch Configuration (optional)
-ELASTICSEARCH_HOST=localhost
-ELASTICSEARCH_PORT=9200
-
-# Django Configuration
-SECRET_KEY=your-secret-key-here
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-```
-
-### Django Settings
-
-Key settings in `sample/settings.py`:
-
-```python
-# Database configuration
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": POSTGRES_HOST,
-        "USER": POSTGRES_USER,
-        "PASSWORD": POSTGRES_PASSWORD,
-        "PORT": POSTGRES_PORT,
-        "NAME": POSTGRES_NAME
-    }
-}
-
-# Celery configuration
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://redis:6379/0')
-CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://redis:6379/0')
-```
-
-## 🧪 Testing
-
-### Running Tests
-```bash
-# Run all tests
-poetry run python manage.py test
-
-# Run specific test file
-poetry run python manage.py test todo.tests
-
-# Run with coverage
-poetry run coverage run --source='.' manage.py test
-poetry run coverage report
-poetry run coverage html  # Generate HTML report
-```
-
-### Test Structure
-Tests follow the same layered architecture:
-
-```
-todo/
-├── tests/
-│   ├── test_domain.py      # Domain layer tests
-│   ├── test_application.py # Application layer tests
-│   ├── test_data.py        # Data layer tests
-│   └── test_interfaces.py  # Interface layer tests
-```
-
-## 🔍 Search Functionality
-
-The application includes Elasticsearch integration for advanced search capabilities:
-
-```python
-# Search todos by title or description
-from todo.data.elasticsearch.search.todo import search_todos
-
-results = search_todos("project documentation")
-```
-
-## 📦 Dependencies
-
-### Core Dependencies
-- **Django 5.1**: Web framework
-- **Django REST Framework**: API framework
-- **Pydantic**: Data validation and serialization
-- **psycopg2-binary**: PostgreSQL adapter
-- **celery**: Background task processing
-- **redis**: Message broker and caching
-- **elasticsearch-dsl**: Elasticsearch integration
-
-### Development Dependencies
-- **poetry**: Dependency management
-- **coverage**: Test coverage reporting
-- **pytest**: Testing framework (optional)
-
-## 🚀 Deployment
-
-### Docker Deployment
-The application is containerized and can be deployed using Docker Compose:
-
-```bash
-# Build and start all services
-docker-compose up --build
-
-# Run in background
-docker-compose up -d
-
-# View logs
-docker-compose logs -f app
-```
-
-### Production Considerations
-1. Set `DEBUG=False` in production
-2. Use environment variables for sensitive configuration
-3. Configure proper database backups
-4. Set up monitoring and logging
-5. Use a production-grade WSGI server (Gunicorn)
-6. Configure reverse proxy (Nginx)
-
-## 🤝 Contributing
-
-When contributing to this project:
-
-1. Follow the Clean Architecture principles
-2. Add tests for new functionality
-3. Update documentation for API changes
-4. Use Pydantic schemas for input validation
-5. Follow Django coding standards
-6. Ensure all layers remain properly separated
-
-## 📖 Additional Resources
-
-- [Clean Architecture by Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-- [Django REST Framework Documentation](https://www.django-rest-framework.org/)
-- [Pydantic Documentation](https://pydantic-docs.helpmanual.io/)
-- [Celery Documentation](https://docs.celeryproject.org/)
