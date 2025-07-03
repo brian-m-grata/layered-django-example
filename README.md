@@ -37,9 +37,9 @@ This project implements Clean Architecture (also known as Hexagonal Architecture
 
 ### Local Development Setup
 
-1. **Navigate to the sample directory**
+1. **Navigate to the app directory**
    ```bash
-   cd sample
+        cd app
    ```
 
 2. **Install dependencies with Poetry**
@@ -63,6 +63,52 @@ This project implements Clean Architecture (also known as Hexagonal Architecture
    poetry run python manage.py runserver
    ```
 
+## 🚀 Using This Repository as a Template
+
+### Cloning for a New Project
+
+If you want to use this repository as a starting point for your own project:
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url> your-new-project-name
+   cd your-new-project-name
+   ```
+
+2. **Remove the existing git history and initialize a new repository**
+   ```bash
+   rm -rf .git
+   git init
+   ```
+
+3. **Add your new remote repository**
+   ```bash
+   git remote add origin <your-new-repository-url>
+   ```
+
+4. **Make your first commit**
+   ```bash
+   git add .
+   git commit -m "Initial commit: Based on layered Django example"
+   git branch -M main
+   git push -u origin main
+   ```
+
+5. **Update project references**
+   - Update `pyproject.toml` with your project name and description
+   - Update `docker-compose.yaml` service names if needed
+   - Update documentation and README files
+
+### Customizing the Template
+
+After cloning, you may want to customize:
+
+- **Project name**: Update `app/pyproject.toml` and directory names
+- **Database configuration**: Modify `app/app/settings.py` for your database setup
+- **Environment variables**: Update `.env.example` with your specific configuration
+- **Dependencies**: Add or remove packages in `app/pyproject.toml`
+- **Documentation**: Update README files with your project-specific information
+
 ## 🏛️ Project Structure
 
 ```
@@ -70,7 +116,7 @@ layered-django-example/
 ├── docker-compose.yaml          # Multi-service Docker setup
 ├── Dockerfile                   # Application container definition
 ├── README.md                    # This file
-└── sample/                      # Django application
+└── app/                      # Django application
     ├── core/                    # Shared utilities and base classes
     ├── todo/                    # Todo application module
     │   ├── domain/              # Business logic and entities
@@ -132,5 +178,5 @@ The application runs with the following services:
 
 ## 📖 API Documentation
 
-The application provides RESTful API endpoints for managing todo lists and items. See the [sample README](sample/README.md) for detailed API documentation.
+The application provides RESTful API endpoints for managing todo lists and items. See the [app README](app/README.md) for detailed API documentation.
 

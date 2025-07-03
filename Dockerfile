@@ -21,13 +21,13 @@ RUN poetry config virtualenvs.create false
 WORKDIR /app
 
 # Copy Poetry configuration files from parent directory
-COPY sample/pyproject.toml sample/poetry.lock ./
+COPY app/pyproject.toml app/poetry.lock ./
 
 # Install dependencies
 RUN poetry install --no-interaction --no-ansi --no-root
 
 # Copy application code
-COPY sample/ .
+COPY app/ .
 
 # Make startup script executable
 RUN chmod +x start.sh
