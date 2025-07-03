@@ -68,7 +68,7 @@ def create_todo(todo_in: TodoCreate) -> Todo:
     todo.save()
 
     # index the todo in elasticsearch instead of adding it to Todo.save()
-    index_todo(todo)
+    # index_todo(todo)
 
     return todo
 
@@ -79,7 +79,7 @@ def update_todo(todo_id: int, todo_in: TodoUpdate) -> Todo:
     todo.save()
 
     # index the todo in elasticsearch instead of adding it to Todo.save()
-    update_indexed_todo(todo)
+    # update_indexed_todo(todo)
 
     return todo
 
@@ -89,6 +89,6 @@ def delete_todo(todo_list_id: int, todo_id: int) -> None:
     todo.delete()
 
     # delete the todo from elasticsearch instead of adding it to Todo.delete()
-    delete_indexed_todo(todo_id)
+    # delete_indexed_todo(todo_id)
 
     return None

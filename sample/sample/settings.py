@@ -74,9 +74,9 @@ WSGI_APPLICATION = 'sample.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 POSTGRES_HOST = os.getenv("POSTGRES_HOST", "localhost")
 POSTGRES_PORT = os.getenv("POSTGRES_PORT", 5432)
-POSTGRES_USER = os.getenv("POSTGRES_USER", "user")
+POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres_user")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "password")
-POSTGRES_NAME = os.getenv("POSTGRES_PASSWORD", "sample")
+POSTGRES_NAME = os.getenv("POSTGRES_NAME", "app")
 
 DATABASES = {
     "default": {
@@ -132,3 +132,16 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Celery Configuration
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://redis:6379/0')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://redis:6379/0')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+
+# Celery Task Discovery
+CELERY_IMPORTS = [
+    'todo.interfaces.tasks',
+]

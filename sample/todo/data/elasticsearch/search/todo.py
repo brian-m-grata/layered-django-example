@@ -1,6 +1,6 @@
 from typing import List
 from todo.data.elasticsearch.documents.todo import TodoIndex
-from todo.data.models.todo import Todo
+from todo.data.models.todo import Todo, TodoList
 
 def search_todos(query: str) -> List[TodoIndex]:
     return TodoIndex.search().query("match", title=query).execute()
